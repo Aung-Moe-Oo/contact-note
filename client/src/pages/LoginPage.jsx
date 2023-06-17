@@ -41,7 +41,7 @@ const LoginPage = () => {
       </div>
       <div className={css.right}>
         <div className={css.card}>
-          <h3>Welcome to Panorama,</h3>
+          <h3>Welcome to Contact Note,</h3>
           <h3>Sign In to Continue.</h3>
           <div className={css.texts}>
             <p>
