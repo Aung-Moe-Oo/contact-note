@@ -4,20 +4,20 @@ import img from "../img/bg.jpg";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { request } from "../requestMethod";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setPasswordError("Your passwords do not match.");
+      toast.error("Your passwords do not match.");
     } else {
       request
         .post("/auth/register", {
@@ -27,8 +27,8 @@ const RegisterPage = () => {
         .then(() => {
           navigate("/login");
         })
-        .catch((error) => {
-          setError(error);
+        .catch((err) => {
+          toast.error(err.response.data);
         });
     }
   };
@@ -39,13 +39,25 @@ const RegisterPage = () => {
 
   return (
     <div className={css.container}>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={css.left}>
         <img src={img} alt="BackgroundImage" />
       </div>
       <div className={css.right}>
         <div className={css.card}>
           <h3>Welcome to Contact Note,</h3>
-          <h3>Sign In to Continue.</h3>
+          <h3>Register to Continue.</h3>
           <div className={css.texts}>
             <p>
               Already have an account? <Link to={"/login"}>Login account</Link>
@@ -92,10 +104,10 @@ const RegisterPage = () => {
               Register
             </button>
           </form>
-          {error && <div className={css.error}>{error.message}</div>}
+          {/* {error && <div className={css.error}>{error.message}</div>}
           {passwordError.length > 0 && (
             <div className={css.error}>{passwordError}</div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

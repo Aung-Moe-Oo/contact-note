@@ -5,13 +5,14 @@ import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [keepLogging, setKeepLogging] = useState(false);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const inputs = {
@@ -24,9 +25,10 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await login(inputs);
+      toast.success("Loggin Success!");
       navigate("/");
     } catch (err) {
-      setError(err);
+      toast.error(err.response.data);
     }
   };
 
@@ -36,6 +38,18 @@ const LoginPage = () => {
 
   return (
     <div className={css.container}>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={css.left}>
         <img src={img} alt="BackgroundImage" />
       </div>
@@ -88,7 +102,6 @@ const LoginPage = () => {
               Sign In
             </button>
           </form>
-          {error && <div className={css.error}>{error?.response?.data}</div>}
         </div>
       </div>
     </div>

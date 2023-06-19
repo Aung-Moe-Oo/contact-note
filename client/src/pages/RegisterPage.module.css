@@ -53,6 +53,9 @@
 .form input {
   width: 100%;
   padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: none;
+  outline: none;
 }
 .passwordWrapper {
   position: relative;
@@ -85,14 +88,23 @@
 }
 .error {
   color: #fff;
-  position: absolute;
-  top: -10%;
+  position: fixed;
+  top: 0;
   left: 0;
   padding: 10px 20px;
   border-radius: 5px;
   background-color: rgb(223, 18, 18);
+  animation: fadeOut 2s forwards;
 }
-
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
 @media screen and (max-width: 768px) {
   .left {
     display: none;

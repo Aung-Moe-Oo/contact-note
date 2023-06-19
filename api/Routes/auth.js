@@ -13,6 +13,10 @@ router.post("/register", async (req, res) => {
     ).toString(),
   });
   try {
+    const existingUser = await User.findOne({ userid: req.body.userid });
+    if (existingUser) {
+      return res.status(401).json("Your email has already been registered.");
+    }
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (err) {
@@ -43,21 +47,14 @@ router.post("/login", async (req, res) => {
         .json("Your user ID and/or password does not match.");
     }
 
-    const accessToken = req.body.keepLogging
-      ? jwt.sign(
-          {
-            id: user._id,
-          },
-          process.env.JWT_SEC,
-          { expiresIn: "365d" }
-        )
-      : jwt.sign(
-          {
-            id: user._id,
-          },
-          process.env.JWT_SEC,
-          { expiresIn: "15m" }
-        );
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SEC,
+      { expiresIn: req.body.keepLogging ? "1d" : "15m" }
+    );
+
     const { password, ...others } = user._doc;
 
     res
